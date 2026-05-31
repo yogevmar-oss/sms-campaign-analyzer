@@ -422,6 +422,14 @@ HUB_FAQ = [
      "ניתחנו מאות הודעות SMS שיווקיות מהרשתות לאורך זמן, וחילצנו את עומק ההנחה הגורפת (פלאט) שניתנה בפועל בכל חודש — לא רק את תקרת הפרסום (עד X%)."),
 ]
 
+# Optional hand-written banner that REPLACES the auto-generated "this month"
+# line at the top of the hub. Set to a sentence (HTML allowed) to feature curated
+# monthly copy; set to None to fall back to the automatic month-aware logic.
+# NOTE: the month named here is editorial, not derived from the date — update or
+# clear it each month. If set, keep the EN translation in sync-sale-tracker.mjs
+# (HUB_I18N) in step.
+BANNER_OVERRIDE = "החודש (יוני) נפתחים סיילי הקיץ בסטורי ובשופרא (כ-30% הנחה). השיא — סוף עונה באוגוסט, עד כ-50%."
+
 # Abbreviated Hebrew month headers for the grid (index 1-12).
 MONTH_ABBR_HE = {
     1: "ינו׳", 2: "פבר׳", 3: "מרץ", 4: "אפר׳", 5: "מאי", 6: "יוני",
@@ -633,6 +641,11 @@ def make_hub_page(store_calendars: list[dict], tailwind_css: str, today: date) -
         else:
             banner_text = f"החודש ({MONTH_NUM_HE[cur_m]}) אין סייל גדול בולט."
         banner_bg, banner_bd, banner_fg = "#FEF3C7", "#FDE68A", "#92400E"
+
+    # Curated monthly copy overrides the auto banner (green "sales on" styling).
+    if BANNER_OVERRIDE:
+        banner_text = BANNER_OVERRIDE
+        banner_bg, banner_bd, banner_fg = "#ECFDF5", "#A7F3D0", "#047857"
 
     # ── Calendar grid (RTL table: month stub col sticky-right + 6 equal store cols)
     # In direction:rtl, the first <th> in HTML renders on the right.
