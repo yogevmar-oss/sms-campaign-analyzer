@@ -430,6 +430,11 @@ HUB_FAQ = [
 # (HUB_I18N) in step.
 BANNER_OVERRIDE = "החודש (יוני) נפתחים סיילי הקיץ בסטורי ובשופרא (כ-30% הנחה). השיא — סוף עונה באוגוסט, עד כ-50%."
 
+# Optional override for which month the calendar marks as "current" (the ●
+# marker + highlighted row). Editorial, like BANNER_OVERRIDE — set to a month
+# number (1–12) to force it, or None to use today's real month.
+MONTH_OVERRIDE = 6  # June
+
 # Abbreviated Hebrew month headers for the grid (index 1-12).
 MONTH_ABBR_HE = {
     1: "ינו׳", 2: "פבר׳", 3: "מרץ", 4: "אפר׳", 5: "מאי", 6: "יוני",
@@ -615,7 +620,7 @@ def make_hub_page(store_calendars: list[dict], tailwind_css: str, today: date) -
     """Self-contained, RTL hub page with the month-by-month sale calendar."""
     head = make_hub_head(tailwind_css, store_calendars)
     nav = make_store_nav(STORES, current_slug=None)
-    cur_m = today.month
+    cur_m = MONTH_OVERRIDE or today.month
 
     # ── "What's on sale this month" banner ──────────────────────────────────
     on_sale = [c for c in store_calendars if cur_m in c["good_months"]]
