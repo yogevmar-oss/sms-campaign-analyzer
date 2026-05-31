@@ -617,10 +617,13 @@ def make_hub_page(store_calendars: list[dict], tailwind_css: str, today: date) -
         banner_bg, banner_bd, banner_fg = "#ECFDF5", "#A7F3D0", "#047857"
     else:
         # No store in a window now — point to the nearest upcoming window per store.
+        # Only credit a store for its window month if the calendar actually shows a
+        # deal for it that month; otherwise the window edge (e.g. "summer = July")
+        # lists a store whose July cell is empty (its real deal is in August).
         nexts = {}
         for c in store_calendars:
             nm = c["next_window_month"]
-            if nm:
+            if nm and nm in c["months"]:
                 nexts.setdefault(nm, []).append(c["nameHe"])
         if nexts:
             soonest = min(nexts, key=lambda m: (m - cur_m) % 12)
